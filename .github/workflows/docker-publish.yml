@@ -36,7 +36,7 @@ jobs:
             TAG=latest
           fi
           echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "IMAGE=ghcr.io/TusharSharma310/blk-hacking-ind-name-lastname" >> $GITHUB_ENV
+          echo "IMAGE=ghcr.io/tusharsharma310/blk-hacking-ind-name-lastname" >> $GITHUB_ENV
 
       # Step 4: Build Docker image
       - name: Build Docker image
