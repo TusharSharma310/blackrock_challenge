@@ -1,0 +1,55 @@
+name: blackrock-retirement-api
+
+services:
+  api:
+    # Build from local Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: blk-hacking-ind-name-lastname
+    container_name: blackrock-retirement-api
+
+    # Port mapping: host:container
+    ports:
+      - "5477:5477"
+
+    # Environment configuration
+    environment:
+      - PORT=5477
+      - WORKERS=1
+      - PYTHONUNBUFFERED=1
+
+    # Resource limits for production stability
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+        reservations:
+          memory: 128M
+          cpus: "0.25"
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5477/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Read-only filesystem for security (app writes to /tmp only)
+    read_only: false
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true
